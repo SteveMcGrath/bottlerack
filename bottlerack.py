@@ -63,6 +63,16 @@ def home_page():
     redirect('/home')
 
 
+@app.route('/static/:filename#.+#')
+def route_static_files(filename):
+    return static_file(filename, root='static')
+
+
+@app.route('/favicon.ico')
+def get_repo_file():
+    return static_file('images/favicon.ico', 'static')
+
+
 @app.route('/:name#.+#')
 def page(name):
     if os.path.exists(os.path.join('pages', '%s.md' % name)):
@@ -74,16 +84,6 @@ def page(name):
     pfile.close()        
     return template('page', content=markdown.markdown(mdpage,
                     ['extra', 'codehilite(force_linenos=True)']))
-
-
-@app.route('/static/:filename#.+#')
-def route_static_files(filename):
-    return static_file(filename, root='static')
-
-
-@app.route('/favicon.ico')
-def get_repo_file():
-    return static_file('images/favicon.ico', 'static')
 
 
 def main(argv=None):

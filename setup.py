@@ -3,7 +3,7 @@ import sys
 
 setup(
     name='BottleRack',
-    version='0.1a1',
+    version='0.1a2',
     description='BottleRack Markdown HTML Server',
     author='Steven McGrath',
     author_email='steve@chigeek.com',
