@@ -40,3 +40,13 @@ The URLs that would be available in the web application would be:
 
 It can't get any simpler than that.  One thing to keep in mind is that it is
 required for markdown files to be named with the .md extension.
+
+## Adding a Blog
+
+Bottlerack also supports a simple blogging system as well utilizing the same
+methods for creating pages.  To enable blogging support, simply create a new
+folder in you rack with the name of "blog" alongside your pages folder.  THe
+blog sorting order is based on creation time of the markdown file.  The /blog
+URL will present a list of the blog items in descending order (newest at the
+top) with a link to the individual items as well as displaying the title (the
+file name) that was specified.
