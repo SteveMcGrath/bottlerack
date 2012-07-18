@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 from bottle import template, Bottle, run, redirect, static_file
-import os, sys, getopt, markdown
+import os, sys, getopt, markdown, glob
 
 app = Bottle()
 
@@ -71,6 +71,36 @@ def route_static_files(filename):
 @app.route('/favicon.ico')
 def get_repo_file():
     return static_file('images/favicon.ico', 'static')
+
+
+@app.route('/blog')
+@app.route('/blog/')
+def blog_home():
+    if os.path.exists(os.path.join('blog')):
+        files = filter(os.path.isfile, glob.glob(os.path.join('blog', '*md')))
+        files.sort(key=lambda x: os.path.getmtime(x), reverse=True)
+        print files
+        return template('page', 
+                        content='<ul>\n%s</ul>' % '\n'.join(
+                            ['<li><a href="/%s">%s</a></li>' %\
+                                (os.path.splitext(f)[0], 
+                                 os.path.splitext(os.path.basename(f))[0]) for f in files]),
+                        )
+    else:
+        redirect('/')
+
+
+@app.route('/blog/:name#.+#')
+def page(name):
+    if os.path.exists(os.path.join('blog', '%s.md' % name)):
+        filename = os.path.join('blog', '%s.md' % name)
+    else:
+        filename = os.path.join('blog', 'error.md')
+    pfile = open(filename)
+    mdpage = pfile.read()
+    pfile.close()        
+    return template('page', content=markdown.markdown(mdpage,
+                    ['extra', 'codehilite(force_linenos=True)']))
 
 
 @app.route('/:name#.+#')
